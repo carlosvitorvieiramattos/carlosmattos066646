@@ -1,0 +1,39 @@
+﻿<div class="login-page">
+  <div class="login-card">
+    <div class="header-section">
+      <div class="logo-wrapper">
+        <img src="assets/images/logos/logo.png" alt="Pet-MT Logo" class="logo">
+      </div>
+      <h1>Bem-vindo!</h1>
+      <p>Acesse o painel administrativo</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label>Usuário</label>
+        <input type="text" formControlName="username" placeholder="Seu usuário"
+          [class.error]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+      </div>
+
+      <div class="input-group">
+        <label>Senha</label>
+        <input type="password" formControlName="password" placeholder="••••••••"
+          [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+      </div>
+
+      <p *ngIf="errorMessage()" class="error-text">
+        {{ errorMessage() }}
+      </p>
+
+      <button type="submit" class="btn-login" [disabled]="isLoading() || loginForm.invalid">
+        {{ isLoading() ? 'Entrando...' : 'Entrar' }}
+      </button>
+    </form>
+
+    <div class="footer-links">
+      <a href="#">Esqueci a senha</a>
+      <span>•</span>
+      <a href="#">Suporte</a>
+    </div>
+  </div>
+</div>

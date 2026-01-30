@@ -1,39 +1,71 @@
 ﻿<div class="login-page">
-  <div class="login-card">
-    <div class="header-section">
+  <div class="login-card shadow-lg">
+    <header class="header-section">
       <div class="logo-wrapper">
-        <img src="assets/images/logos/logo.png" alt="Pet-MT Logo" class="logo">
+        <img src="assets/images/logos/logo.png" alt="Pet Manager Logo" class="logo">
       </div>
-      <h1>Bem-vindo!</h1>
-      <p>Acesse o painel administrativo</p>
-    </div>
+      <h1 class="brand-title">Bem-vindo!</h1>
+      <p class="brand-subtitle">Acesse o painel administrativo PJC-MT</p>
+    </header>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate autocomplete="on">
+      
+      @if (errorMessage()) {
+        <div class="error-banner animate-shake" role="alert">
+          <i class="bi bi-exclamation-circle-fill"></i>
+          <span>{{ errorMessage() }}</span>
+        </div>
+      }
+
       <div class="input-group">
-        <label>Usuário</label>
-        <input type="text" formControlName="username" placeholder="Seu usuário"
-          [class.error]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+        <label for="username">Usuário</label>
+        <div class="input-wrapper">
+          <i class="bi bi-person icon-field"></i>
+          <input 
+            id="username"
+            type="text" 
+            formControlName="username" 
+            placeholder="Digite seu usuário institucional"
+            autocomplete="username"
+            [class.is-invalid]="u?.invalid && u?.touched">
+        </div>
+        @if (u?.invalid && u?.touched) {
+          <div class="error-msg-container">
+            @if (u?.errors?.['required']) { <small class="text-danger">Campo obrigatório.</small> }
+            @if (u?.errors?.['username']) { <small class="text-danger">Formato de usuário inválido.</small> }
+          </div>
+        }
       </div>
 
       <div class="input-group">
-        <label>Senha</label>
-        <input type="password" formControlName="password" placeholder="••••••••"
-          [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        <label for="password">Senha</label>
+        <div class="input-wrapper">
+          <i class="bi bi-lock icon-field"></i>
+          <input 
+            id="password"
+            type="password" 
+            formControlName="password" 
+            placeholder="••••••••"
+            autocomplete="current-password"
+            [class.is-invalid]="p?.invalid && p?.touched">
+        </div>
+        @if (p?.invalid && p?.touched) {
+          <small class="text-danger">A senha deve ter no mínimo 3 caracteres.</small>
+        }
       </div>
-
-      <p *ngIf="errorMessage()" class="error-text">
-        {{ errorMessage() }}
-      </p>
 
       <button type="submit" class="btn-login" [disabled]="isLoading() || loginForm.invalid">
-        {{ isLoading() ? 'Entrando...' : 'Entrar' }}
+        @if (isLoading()) {
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span>Entrando...</span>
+        } @else {
+          <span>Entrar no Sistema</span>
+        }
       </button>
     </form>
-
-    <div class="footer-links">
-      <a href="#">Esqueci a senha</a>
-      <span>•</span>
-      <a href="#">Suporte</a>
-    </div>
-  </div>
+    
+    <footer class="login-footer">
+      <small>© 2026 Polícia Judiciária Civil de Mato Grosso</small>
+    </footer>
+  </div> 
 </div>

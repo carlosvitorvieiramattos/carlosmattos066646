@@ -22,24 +22,18 @@ export class AuthFacade {
   
   private readonly API_URL = 'https://pet-manager-api.geia.vip/autenticacao';
 
-  /**
-   * Realiza o login convertendo os dados do formulário 
-   * para os nomes exigidos pelo Swagger (username/password)
-   */
-  login(credenciais: { email: string; senha: string }): Observable<LoginResponse> { 
-    // Mapeamento necessário para compatibilidade com o backend Quarkus da PJC-MT
+  
+  login(credenciais: { username: string; senha: string }): Observable<LoginResponse> { 
     const payload = {
-      username: credenciais.email,
+      username: credenciais.username,
       password: credenciais.senha
     };
 
     return this.http.post<LoginResponse>(`${this.API_URL}/login`, payload)
       .pipe(
         tap(res => {
-          // Atualiza o estado global e persiste os tokens
           this.state.setTokens(res.access_token, res.refresh_token);
           
-          // Navegação para a rota protegida definida no Edital
           this.router.navigate(['/dashboard']);
         }),
         catchError(err => {
@@ -51,18 +45,14 @@ export class AuthFacade {
       );
   }
 
-  /**
-   * Encerra a sessão limpando o estado reativo e o armazenamento local
-   */
+  
   logout(): void { 
     this.state.clearSession(); 
     this.router.navigate(['/autenticacao/login']);
   }
 
-  /**
-   * Expõe o estado de autenticação (Signal)
-   */
+ 
   get estaLogado() { 
-    return this.state.isAuthenticated(); // Retorna o valor do Signal
+    return this.state.isAuthenticated(); 
   }
 }

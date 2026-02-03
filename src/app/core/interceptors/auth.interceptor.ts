@@ -49,12 +49,10 @@ const handle401Error = (
   authService: AuthService
 ): Observable<HttpEvent<unknown>> => {
 
-  // CASO A: Ninguém está renovando ainda
   if (!isRefreshing) {
     isRefreshing = true;
     refreshTokenSubject.next(null); // Trava a fila
 
-    // Convertemos a Promise do seu serviço para Observable usando 'from'
     return from(authService.refreshToken()).pipe(
       switchMap((sucesso: boolean) => {
         isRefreshing = false;

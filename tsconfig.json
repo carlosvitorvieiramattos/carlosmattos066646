@@ -1,7 +1,7 @@
-{
+﻿{
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "rootDir": "src",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -21,9 +21,10 @@
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
     "paths": {
-      "@core/*": ["src/app/core/*"],
-      "@shared/*": ["src/app/shared/*"],
-      "@env/*": ["src/environments/*"]
+      /* Ajustado para caminhos relativos sem depender de baseUrl */
+      "@core/*": ["./src/app/core/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@env/*": ["./src/environments/*"]
     }
   },
   "angularCompilerOptions": {

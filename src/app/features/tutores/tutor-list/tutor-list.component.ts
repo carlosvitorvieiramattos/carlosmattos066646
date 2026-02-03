@@ -71,7 +71,6 @@ export class TutorListComponent implements OnInit {
   }
 
   /**
-   * Otimização: Debounce (Opcional)
    * Para evitar chamadas excessivas à API a cada tecla digitada.
    */
   filtrar(event: Event) {
@@ -100,4 +99,5 @@ export class TutorListComponent implements OnInit {
       this.isLoading.set(false);
     }
   }
+  
 }

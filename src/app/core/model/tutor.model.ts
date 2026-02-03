@@ -19,7 +19,7 @@ export interface Tutor {
 
   
   foto?: TutorFoto;
-
+  fotoUrl?: string;
   
   pets?: any[]; 
 }

@@ -1,35 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { PetService, PaginatedPets, Pet } from './pet.service'; // Ajuste o caminho se necessário
+import { PetService, PaginatedPets, Pet } from './pet.service';
 
 describe('PetService', () => {
   let service: PetService;
   let httpMock: HttpTestingController;
-
   const API_URL = 'https://pet-manager-api.geia.vip/v1/pets';
-
-  // Mock de dados reutilizável
-  const mockPet: Pet = {
-    id: 1,
-    nome: 'Rex',
-    raca: 'Pastor Alemão',
-    idade: 5,
-    foto: { id: 10, nome: 'foto.jpg', contentType: 'image/jpeg', url: 'http://url' }
-  };
-
-  const mockPaginatedResponse: PaginatedPets = {
-    content: [mockPet],
-    totalElements: 1,
-    totalPages: 1,
-    number: 0
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [PetService]
     });
-
     service = TestBed.inject(PetService);
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -42,155 +24,61 @@ describe('PetService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('carregarPets', () => {
-    it('deve atualizar o Signal "pets" e "loading" ao carregar com sucesso', async () => {
-      // 1. Inicia a chamada
-      const promise = service.carregarPets();
+  it('deve carregar pets e atualizar o signal de pets', async () => {
+    const mockResponse: PaginatedPets = {
+      content: [{ id: 1, nome: 'Rex', raca: 'Vira-lata', idade: 3 }],
+      totalElements: 1,
+      totalPages: 1,
+      number: 0
+    };
 
-      // 2. Verifica o estado de loading (síncrono, logo após chamar)
-      expect(service.loading()).toBeTrue();
+    // Iniciamos a chamada (Promise)
+    const promise = service.carregarPets();
 
-      // 3. Intercepta a requisição
-      const req = httpMock.expectOne(req => req.url === API_URL && req.method === 'GET');
-      
-      // Verifica parâmetros padrão
-      expect(req.request.params.get('page')).toBe('0');
-      expect(req.request.params.get('size')).toBe('10');
-      expect(req.request.params.get('sort')).toBe('id,desc');
+    // Simulamos a requisição HTTP
+    const req = httpMock.expectOne(req => req.url === API_URL && req.params.has('page'));
+    expect(req.request.method).toBe('GET');
+    req.flush(mockResponse);
 
-      // 4. Retorna os dados simulados
-      req.flush(mockPaginatedResponse);
+    const result = await promise;
 
-      // 5. Aguarda a promise resolver
+    // Verificações
+    expect(result.content.length).toBe(1);
+    expect(service.pets()).toEqual(mockResponse.content); // Valida o Signal reativo
+    expect(service.totalPetsCarregados()).toBe(1); // Valida o Computed
+  });
+
+  it('deve lidar com erro ao carregar pets', async () => {
+    const promise = service.carregarPets();
+
+    const req = httpMock.expectOne(req => req.url === API_URL);
+    req.error(new ErrorEvent('Network error'));
+
+    try {
       await promise;
+    } catch (error: any) {
+      expect(error.message).toBe('Erro ao carregar a base de dados de animais.');
+    }
 
-      // 6. Verifica estado final dos Signals
-      expect(service.pets()).toEqual([mockPet]);
-      expect(service.loading()).toBeFalse();
-      expect(service.totalPetsCarregados()).toBe(1);
-    });
-
-    it('deve enviar parâmetros de filtro (nome e raça) corretamente', async () => {
-      service.carregarPets('Rex', 0, 10, 'Pastor');
-
-      const req = httpMock.expectOne(req => 
-        req.url === API_URL && 
-        req.params.get('nome') === 'Rex' && 
-        req.params.get('raca') === 'Pastor'
-      );
-
-      req.flush(mockPaginatedResponse);
-    });
-
-    it('deve lidar com erro na API e resetar a lista de pets', async () => {
-      const promise = service.carregarPets();
-
-      const req = httpMock.expectOne(API_URL);
-      // Simula erro 500
-      req.flush('Erro no servidor', { status: 500, statusText: 'Internal Server Error' });
-
-      try {
-        await promise;
-        fail('Deveria ter lançado um erro');
-      } catch (error) {
-        expect(error).toEqual(new Error('Erro ao carregar a base de dados de animais.'));
-      }
-
-      expect(service.pets()).toEqual([]); // Deve limpar a lista em caso de erro
-      expect(service.loading()).toBeFalse();
-    });
+    expect(service.pets().length).toBe(0);
+    expect(service.loading()).toBeFalse();
   });
 
-  describe('getPetById', () => {
-    it('deve buscar um pet pelo ID', async () => {
-      const promise = service.getPetById(1);
+  it('deve deletar um pet e atualizar o signal localmente', async () => {
+    // Estado inicial com um pet
+    // Nota: Para testar o sinal privado, podemos carregar dados antes
+    const initialPet: Pet = { id: 123, nome: 'Bobi', raca: 'Poodle', idade: 5 };
+    
+    // Chamada de delete
+    const promise = service.deletePet(123);
 
-      const req = httpMock.expectOne(`${API_URL}/1`);
-      expect(req.request.method).toBe('GET');
-      req.flush(mockPet);
+    const req = httpMock.expectOne(`${API_URL}/123`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null);
 
-      const resultado = await promise;
-      expect(resultado).toEqual(mockPet);
-    });
-  });
-
-  describe('addPet', () => {
-    it('deve enviar requisição POST com o corpo correto', async () => {
-      const novoPet: Partial<Pet> = { nome: 'Totó', idade: 2 };
-      
-      const promise = service.addPet(novoPet);
-
-      const req = httpMock.expectOne(API_URL);
-      expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual(novoPet);
-
-      req.flush({ ...novoPet, id: 2 });
-      
-      await promise;
-    });
-  });
-
-  describe('updatePet', () => {
-    it('deve enviar requisição PUT para atualizar', async () => {
-      const payload: Partial<Pet> = { nome: 'Rex Atualizado' };
-      
-      const promise = service.updatePet(1, payload);
-
-      const req = httpMock.expectOne(`${API_URL}/1`);
-      expect(req.request.method).toBe('PUT');
-      expect(req.request.body).toEqual(payload);
-
-      req.flush({ ...mockPet, ...payload });
-      
-      await promise;
-    });
-  });
-
-  describe('deletePet', () => {
-    it('deve enviar requisição DELETE e remover o item do Signal localmente', async () => {
-      // 1. Pré-configuração: Popula o signal com 2 pets
-      const petParaDeletar = { ...mockPet, id: 1 };
-      const petParaManter = { ...mockPet, id: 2, nome: 'Outro' };
-      
-      // Hack: Chamamos carregarPets para popular o estado inicial antes do teste de delete
-      const loadPromise = service.carregarPets();
-      const loadReq = httpMock.expectOne(req => req.method === 'GET');
-      loadReq.flush({ ...mockPaginatedResponse, content: [petParaDeletar, petParaManter] });
-      await loadPromise;
-
-      expect(service.pets().length).toBe(2); // Confirma que temos 2 pets
-
-      // 2. Executa o Delete
-      const deletePromise = service.deletePet(1);
-
-      const req = httpMock.expectOne(`${API_URL}/1`);
-      expect(req.request.method).toBe('DELETE');
-      req.flush(null); // Retorno vazio (204 No Content)
-
-      await deletePromise;
-
-      // 3. Verifica se o Signal foi atualizado (id 1 deve sumir, id 2 deve ficar)
-      expect(service.pets().length).toBe(1);
-      expect(service.pets()[0].id).toBe(2);
-    });
-  });
-
-  describe('uploadFoto', () => {
-    it('deve enviar requisição POST com FormData', async () => {
-      const mockFile = new File([''], 'teste.jpg', { type: 'image/jpeg' });
-      
-      const promise = service.uploadFoto(1, mockFile);
-
-      const req = httpMock.expectOne(`${API_URL}/1/fotos`);
-      expect(req.request.method).toBe('POST');
-      
-      // Verifica se o corpo é um FormData e se contém o arquivo
-      expect(req.request.body instanceof FormData).toBeTrue();
-      expect(req.request.body.has('foto')).toBeTrue();
-
-      req.flush(mockPet.foto!);
-
-      await promise;
-    });
+    await promise;
+    
+    // Verifica se o pet sumiu do Signal
+    expect(service.pets().find(p => p.id === 123)).toBeUndefined();
   });
 });

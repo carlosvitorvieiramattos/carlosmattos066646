@@ -1,6 +1,6 @@
 ﻿import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient, HttpParams, HttpEvent, HttpEventType } from '@angular/common/http';
-import { firstValueFrom, Observable, tap } from 'rxjs';
+import { HttpClient, HttpParams, HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
+import { firstValueFrom, map, tap, lastValueFrom, filter } from 'rxjs';
 import { Pet } from './pet.service';
 
 export interface TutorFoto {
@@ -11,14 +11,14 @@ export interface TutorFoto {
 }
 
 export interface Tutor {
-  id?: number;
+  id: number; // ID geralmente é obrigatório na resposta
   nome: string;
   email: string;
   telefone: string;
   endereco: string;
-  cpf: number; // Alterado para number (int64) conforme a especificação [cite: 377, 396]
+  cpf: number; 
   pets?: Pet[];
-  foto?: TutorFoto; // Conforme o esquema da resposta 
+  foto?: TutorFoto; 
 }
 
 export interface PaginatedTutores {
@@ -36,8 +36,6 @@ export class TutorService {
   
   private readonly _tutores = signal<Tutor[]>([]);
   private readonly _loading = signal<boolean>(false);
-  
-  // Signal para monitorar o progresso do upload (0 a 100)
   readonly uploadProgress = signal<number>(0);
 
   readonly tutores = this._tutores.asReadonly();
@@ -56,7 +54,7 @@ export class TutorService {
       return dados; 
     } catch (error) {
       this._tutores.set([]);
-      throw new Error('Erro ao sincronizar com a base de dados de tutores.');
+      throw error;
     } finally {
       this._loading.set(false);
     }
@@ -67,7 +65,6 @@ export class TutorService {
   }
 
   async addTutor(payload: Partial<Tutor>): Promise<Tutor> {
-    // Nota: O payload deve conter o CPF como número [cite: 377]
     return firstValueFrom(this.http.post<Tutor>(this.apiUrl, payload));
   }
 
@@ -80,13 +77,10 @@ export class TutorService {
     this._tutores.update(lista => lista.filter(t => t.id !== Number(id)));
   }
 
-  /**
-   * Realiza o upload da foto com rastreio de progresso
-   * Endpoint: POST /v1/tutores/{id}/fotos [cite: 441]
-   */
+   
   async uploadFoto(id: number | string, arquivo: File): Promise<TutorFoto> {
     const formData = new FormData();
-    formData.append('foto', arquivo); // Campo 'foto' obrigatório 
+    formData.append('foto', arquivo);
 
     this.uploadProgress.set(0);
 
@@ -98,19 +92,22 @@ export class TutorService {
         if (event.type === HttpEventType.UploadProgress && event.total) {
           this.uploadProgress.set(Math.round((100 * event.loaded) / event.total));
         }
-      })
-      
+      }),
+      // Filtra para que o Observable só emita o valor final (HttpResponse)
+      filter((event): event is HttpResponse<TutorFoto> => event.type === HttpEventType.Response),
+      map(res => res.body as TutorFoto)
     );
 
-    const finalEvent = await firstValueFrom(upload$);
-    return (finalEvent as any).body as TutorFoto;
+    // lastValueFrom espera o fluxo fechar, evitando o erro "canceled"
+    return await lastValueFrom(upload$);
   }
 
   async vincularPet(tutorId: number | string, petId: number | string): Promise<void> {
-    return firstValueFrom(this.http.post<void>(`${this.apiUrl}/${tutorId}/pets/${petId}`, {}));
+    // Retornamos firstValueFrom para garantir a conclusão antes do componente seguir
+    return await firstValueFrom(this.http.post<void>(`${this.apiUrl}/${tutorId}/pets/${petId}`, {}));
   }
 
   async desvincularPet(tutorId: number | string, petId: number | string): Promise<void> {
-    return firstValueFrom(this.http.delete<void>(`${this.apiUrl}/${tutorId}/pets/${petId}`));
+    return await firstValueFrom(this.http.delete<void>(`${this.apiUrl}/${tutorId}/pets/${petId}`));
   }
 }

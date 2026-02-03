@@ -1,8 +1,8 @@
 ﻿import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthState } from '../state/auth.state';
-import { tap, catchError } from 'rxjs/operators';
+import { AuthState } from '../state/auth.state'; // Verifique se o caminho está correto
+import { tap, catchError, firstValueFrom } from 'rxjs';
 import { throwError, Observable } from 'rxjs';
 
 /**
@@ -20,39 +20,38 @@ export class AuthFacade {
   private readonly state = inject(AuthState);
   private readonly router = inject(Router);
   
+  // URL ajustada conforme sua necessidade
   private readonly API_URL = 'https://pet-manager-api.geia.vip/autenticacao';
 
-  
-  login(credenciais: { username: string; senha: string }): Observable<LoginResponse> { 
-    const payload = {
-      username: credenciais.username,
-      password: credenciais.senha
-    };
-
-    return this.http.post<LoginResponse>(`${this.API_URL}/login`, payload)
-      .pipe(
-        tap(res => {
-          this.state.setTokens(res.access_token, res.refresh_token);
-          
-          this.router.navigate(['/dashboard']);
-        }),
-        catchError(err => {
-          let msg = 'Falha na conexão com o sistema.';
-          if (err.status === 401) msg = 'Usuário ou senha inválidos.';
-          
-          return throwError(() => new Error(msg));
-        })
+  /**
+   * Método compatível com o seu LoginComponent (utiliza async/await)
+   */
+  async login(credenciais: { username: string; password: string }): Promise<boolean> {
+    // Transformamos o Observable em Promise para o componente usar o try/catch
+    try {
+      const response = await firstValueFrom(
+        this.http.post<LoginResponse>(`${this.API_URL}/login`, credenciais)
       );
+
+      if (response && response.access_token) {
+        this.state.setTokens(response.access_token, response.refresh_token);
+        // O redirecionamento pode ser feito aqui ou no componente. 
+        // Se fizer aqui, o componente apenas confirma o sucesso.
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      // Repassamos o erro para o componente tratar a mensagem (401, 500, etc)
+      throw err;
+    }
   }
 
-  
   logout(): void { 
     this.state.clearSession(); 
     this.router.navigate(['/autenticacao/login']);
   }
 
- 
-  get estaLogado() { 
+  get estaLogado(): boolean { 
     return this.state.isAuthenticated(); 
   }
 }

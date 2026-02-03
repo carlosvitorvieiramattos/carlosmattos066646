@@ -122,8 +122,6 @@ export class TutorFormComponent implements OnInit {
         ...formValues,
         // Limpa a máscara do CPF
         cpf: Number(String(formValues.cpf).replace(/\D/g, '')),
-        // A API costuma esperar uma lista de objetos ou IDs. 
-        // Se a API pedir apenas IDs, petIds já está correto.
       };
 
       let tutorResult;

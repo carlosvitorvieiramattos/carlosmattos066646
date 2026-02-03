@@ -1,0 +1,85 @@
+/* Container Principal */
+main {
+  min-height: calc(100vh - 73px); /* Altura total menos a altura aproximada da nav */
+  background-color: #fffaf5; /* Fundo suave alaranjado para combinar com o tema */
+  transition: padding 0.3s ease;
+}
+
+/* Estilo para a Logo */
+.logo {
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: rotate(-5deg) scale(1.1);
+}
+
+/* Melhoria nos Links de Navegação */
+nav a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  overflow: hidden;
+}
+
+/* Efeito de Link Ativo (Reforço do Tailwind) */
+nav a.text-orange-600 {
+  box-shadow: inset 0 0 0 1px rgba(234, 88, 12, 0.1);
+}
+
+/* Animação suave para o conteúdo que entra via Router Outlet */
+router-outlet + * {
+  display: block;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilização da Barra de Rolagem (Opcional - Estilo Laranja) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff7ed;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #fdba74;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f97316;
+}
+
+/* Responsividade para telas muito pequenas */
+@media (max-width: 640px) {
+  nav {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  nav .flex.gap-4 {
+    gap: 0.5rem;
+  }
+  
+  nav a {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.85rem;
+
+  }
+
+  
+}

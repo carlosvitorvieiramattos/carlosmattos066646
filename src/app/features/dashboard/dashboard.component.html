@@ -1,0 +1,147 @@
+﻿<div class="p-4 md:p-8 animate-in fade-in duration-700 bg-[#f8fafc] min-h-screen flex flex-col">
+
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+    <div>
+      <h1 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter mb-2">
+        Painel <span class="text-orange-600">Geral</span>
+      </h1>
+      <div class="flex items-center gap-2 text-slate-400 font-medium text-sm">
+        <i class="bi bi-geo-alt-fill text-orange-500"></i>
+        <span>Cuiabá, Mato Grosso</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+      <button routerLink="/pets/novo" 
+              class="h-14 w-full md:w-auto bg-slate-900 text-white px-8 rounded-2xl font-bold hover:bg-slate-800 hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap">
+        <i class="bi bi-plus-lg text-lg"></i>
+        <span>Adicionar Pet</span>
+      </button>
+
+      <button routerLink="/tutores/novo" 
+              class="h-14 w-full md:w-auto bg-orange-600 text-white px-8 rounded-2xl font-bold hover:bg-orange-500 hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 uppercase tracking-wider text-xs whitespace-nowrap">
+        <i class="bi bi-person-plus-fill text-lg"></i>
+        <span>Novo Tutor</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    
+    <div class="relative group overflow-hidden p-8 border border-white/50 shadow-xl shadow-slate-200/50 rounded-[2.5rem] bg-white transition-all hover:-translate-y-1 hover:shadow-orange-100">
+      <div class="absolute -right-4 -top-4 w-32 h-32 bg-orange-50 rounded-full blur-3xl group-hover:bg-orange-100 transition-colors"></div>
+      
+      <div class="relative z-10 flex items-center">
+        <div class="w-20 h-20 rounded-[2rem] flex items-center justify-center bg-gradient-to-br from-orange-400 to-orange-600 shadow-lg shadow-orange-200 group-hover:scale-110 transition-transform duration-500">
+          <svg class="w-10 h-10 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+            <path d="M298.5 156.9C312.8 199.8 298.2 243.1 265.9 253.7C233.6 264.3 195.8 238.1 181.5 195.2C167.2 152.3 181.8 109 214.1 98.4C246.4 87.8 284.2 114 298.5 156.9zM164.4 262.6C183.3 295 178.7 332.7 154.2 346.7C129.7 360.7 94.5 345.8 75.7 313.4C56.9 281 61.4 243.3 85.9 229.3C110.4 215.3 145.6 230.2 164.4 262.6zM133.2 465.2C185.6 323.9 278.7 288 320 288C361.3 288 454.4 323.9 506.8 465.2C510.4 474.9 512 485.3 512 495.7L512 497.3C512 523.1 491.1 544 465.3 544C453.8 544 442.4 542.6 431.3 539.8L343.3 517.8C328 514 312 514 296.7 517.8L208.7 539.8C197.6 542.6 186.2 544 174.7 544C148.9 544 128 523.1 128 497.3L128 495.7C128 485.3 129.6 474.9 133.2 465.2zM485.8 346.7C461.3 332.7 456.7 295 475.6 262.6C494.5 230.2 529.6 215.3 554.1 229.3C578.6 243.3 583.2 281 564.3 313.4C545.4 345.8 510.3 360.7 485.8 346.7zM374.1 253.7C341.8 243.1 327.2 199.8 341.5 156.9C355.8 114 393.6 87.8 425.9 98.4C458.2 109 472.8 152.3 458.5 195.2C444.2 238.1 406.4 264.3 374.1 253.7z"/>
+          </svg>
+        </div>
+        
+        <div class="ml-6">
+          <span class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] block mb-1">Base de Dados</span>
+          <div class="flex items-baseline gap-2">
+            <span class="text-5xl font-black text-slate-900 tracking-tighter">{{ totalPets() }}</span>
+            <span class="text-orange-500 font-bold text-sm uppercase tracking-wide">Pets</span>
+          </div>
+        </div>
+      </div>
+      <a routerLink="/pets" class="absolute inset-0 z-20"></a>
+    </div>
+  
+    <div class="relative group overflow-hidden p-8 border border-white/50 shadow-xl shadow-slate-200/50 rounded-[2.5rem] bg-white transition-all hover:-translate-y-1 hover:shadow-slate-300">
+      <div class="absolute -right-4 -top-4 w-32 h-32 bg-slate-50 rounded-full blur-3xl group-hover:bg-slate-100 transition-colors"></div>
+      
+      <div class="relative z-10 flex items-center">
+        <div class="w-20 h-20 rounded-[2rem] flex items-center justify-center bg-slate-900 shadow-lg shadow-slate-300 group-hover:scale-110 transition-transform duration-500">
+          <i class="bi bi-people-fill text-white text-3xl"></i>
+        </div>
+        
+        <div class="ml-6">
+          <span class="text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] block mb-1">Cadastrados</span>
+          <div class="flex items-baseline gap-2">
+            <span class="text-5xl font-black text-slate-900 tracking-tighter">{{ totalTutores() }}</span>
+            <span class="text-slate-500 font-bold text-sm uppercase tracking-wide">Tutores</span>
+          </div>
+        </div>
+      </div>
+      <a routerLink="/tutores" class="absolute inset-0 z-20"></a>
+    </div>
+  </div>
+
+  <div class="bg-white border border-slate-100 shadow-sm rounded-[2.5rem] overflow-hidden flex flex-col flex-1">
+    
+    <div class="p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-50 gap-4">
+      <div>
+        <h6 class="m-0 font-black text-slate-900 uppercase tracking-tight text-xl">Atividades Recentes</h6>
+        <p class="text-slate-400 text-sm font-medium mt-1">Logs do sistema em tempo real</p>
+      </div>
+      
+      <div class="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+        </span>
+        <span class="text-slate-600 font-bold text-xs tracking-wide font-mono">
+          {{ today | date:'dd/MM/yyyy HH:mm' }}
+        </span>
+      </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50/50 border-b border-slate-100">
+            <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Descrição</th>
+            <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Raça</th>
+            <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Horário</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          @if (loading()) {
+            @for (item of [1,2,3]; track $index) {
+              <tr class="animate-pulse">
+                <td class="px-8 py-6"><div class="h-2 bg-slate-100 rounded w-2/3"></div></td>
+                <td class="px-8 py-6"><div class="h-2 bg-slate-100 rounded w-1/2 mx-auto"></div></td>
+                <td class="px-8 py-6"><div class="h-2 bg-slate-100 rounded w-1/4 ml-auto"></div></td>
+              </tr>
+            }
+          } @else {
+            @for (atividade of atividadesRecentes(); track atividade.id) {
+              <tr class="group hover:bg-slate-50/50 transition-colors">
+                <td class="px-8 py-5">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                      <i class="bi bi-lightning-charge-fill text-sm"></i>
+                    </div>
+                    <div>
+                      <div class="text-slate-700 font-bold text-sm">{{ atividade.descricao }}</div>
+                      <div class="text-slate-400 text-[10px] font-bold mt-0.5">ID #{{ atividade.id }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-8 py-5 text-center">
+                  <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-bold uppercase tracking-wider border border-slate-200">
+                    {{ atividade.usuarioNome }}
+                  </span>
+                </td>
+                <td class="px-8 py-5 text-right">
+                  <span class="text-slate-400 font-mono text-xs font-bold">{{ atividade.dataHora | date:'HH:mm' }}</span>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="3" class="px-8 py-20 text-center">
+                  <div class="flex flex-col items-center justify-center text-slate-300 gap-2">
+                    <i class="bi bi-clipboard-data text-4xl"></i>
+                    <span class="font-medium text-sm">Nenhuma atividade recente.</span>
+                  </div>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

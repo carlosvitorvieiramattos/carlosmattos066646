@@ -1,0 +1,133 @@
+﻿/* --- Variáveis e Base --- */
+:root {
+  --orange-mt: #ea580c;      /* Laranja Principal */
+  --orange-mt-hover: #c2410c;
+  --orange-mt-light: #fff7ed;
+  --slate-mt: #0f172a;       /* Slate Profundo */
+  --bg-main: #f8fafc;
+}
+
+/* Container Centralizado e Focado */
+.container { 
+  max-width: 1000px !important; /* Estreitado para foco central */
+  margin: 0 auto;
+}
+
+/* --- Cards e Superfícies --- */
+.card {
+  border: 1px solid #f1f5f9 !important;
+  border-radius: 2.5rem !important; /* Bordas mais orgânicas */
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.05) !important;
+  background: white;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Header do Pet - Mesclado com Gradiente Moderno */
+.bg-orange-header {
+  background: linear-gradient(135deg, var(--orange-mt) 0%, #fb923c 100%);
+  padding: 3rem 2rem !important;
+  color: white;
+  text-align: center;
+}
+
+/* --- Tipografia e Badges --- */
+.badge-pet {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px); /* Efeito vidro */
+  color: white;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.5rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.text-primary {
+  color: var(--orange-mt) !important;
+}
+
+/* --- Elementos de Interação (Botões) --- */
+.btn-primary {
+  background-color: var(--orange-mt) !important;
+  border: none !important;
+  padding: 0.8rem 1.5rem;
+  font-weight: 700;
+  border-radius: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 10px 15px -3px rgba(234, 88, 12, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: var(--orange-mt-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 20px -3px rgba(234, 88, 12, 0.3);
+}
+
+/* Botão de Tutor (Vincular) */
+.btn-warning {
+  background-color: var(--orange-mt-light) !important;
+  border: 1px solid #ffedd5 !important;
+  color: var(--orange-mt) !important;
+  font-weight: 800;
+  border-radius: 1rem;
+}
+
+/* --- Perfil e Imagem --- */
+.pet-profile-img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 2.5rem; /* Seguindo o arredondamento dos cards */
+  border: 6px solid white;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pet-profile-img:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
+/* --- Listagem de Tutores --- */
+.list-group-item {
+  border: none !important;
+  margin-bottom: 0.5rem;
+  border-radius: 1.2rem !important;
+  background-color: var(--orange-mt) !important;
+  transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: white !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateX(5px);
+}
+
+/* --- Modal Estilo "Mobile App" --- */
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(40px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-content {
+  animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none !important;
+  border-radius: 3rem !important;
+  padding: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Scrollbar Personalizada */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--orange-mt);
+}

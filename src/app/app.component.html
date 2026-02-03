@@ -1,0 +1,45 @@
+﻿@if (authState.isAuthenticated()) {
+  <nav class="bg-white border-b border-orange-100 px-6 py-4 flex justify-between items-center shadow-sm sticky top-0 z-50">
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-3">
+        <img src="./assets/images/logos/logo.png" 
+             alt="Pet Manager Logo" 
+             class="h-16 w-auto object-contain transition-transform hover:scale-105 cursor-pointer"
+             routerLink="/dashboard">
+      </div>
+      
+      <div class="flex gap-2">
+        <a routerLink="/dashboard" 
+           routerLinkActive="text-orange-600 bg-orange-50 border-orange-200" 
+           [routerLinkActiveOptions]="{exact: true}"
+           class="px-4 py-2 rounded-xl font-bold text-slate-500 hover:text-orange-600 transition-all border border-transparent">
+          Dashboard
+        </a>
+
+        <a routerLink="/pets" 
+           routerLinkActive="text-orange-600 bg-orange-50 border-orange-200" 
+           class="px-4 py-2 rounded-xl font-bold text-slate-500 hover:text-orange-600 transition-all border border-transparent">
+          Animais
+        </a>
+
+        <a routerLink="/tutores" 
+           routerLinkActive="text-orange-600 bg-orange-50 border-orange-200" 
+           class="px-4 py-2 rounded-xl font-bold text-slate-500 hover:text-orange-600 transition-all border border-transparent">
+          Tutores
+        </a>
+      </div>
+    </div>
+
+    <button (click)="sair()" 
+            class="px-4 py-2 rounded-xl border-2 border-orange-100 text-orange-600 font-bold hover:bg-orange-600 hover:text-white transition-all flex items-center gap-2">
+      <i class="bi bi-box-arrow-right"></i>
+      Sair 
+    </button>
+  </nav>
+}
+
+<main [class.p-8]="authState.isAuthenticated()" 
+      [class.bg-slate-50]="authState.isAuthenticated()" 
+      class="min-h-screen transition-all duration-300">
+  <router-outlet></router-outlet>
+</main>

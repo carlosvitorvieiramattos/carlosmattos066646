@@ -1,0 +1,26 @@
+﻿version: '3.8'
+
+services:
+  app-pets:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: app-pets:latest
+    container_name: pets-front
+    ports:
+      - "8080:80"
+    restart: always
+    networks:
+      - pets-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
+        reservations:
+          cpus: '0.10'
+          memory: 64M
+
+networks:
+  pets-network:
+    driver: bridge

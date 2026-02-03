@@ -1,0 +1,10 @@
+﻿{
+  "/api": {
+    "target": "https://pet-manager-api.geia.vip",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}

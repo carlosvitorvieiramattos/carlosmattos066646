@@ -1,0 +1,32 @@
+# Dependências
+/node_modules/
+
+# Saída de Build (Angular usa /dist)
+/dist/
+/.angular/
+
+# Logs de Erro
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Arquivos de Ambiente (Segurança)
+.env*
+src/environments/environment.prod.ts
+
+# IDEs (VS Code, WebStorm)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo

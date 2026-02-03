@@ -1,0 +1,104 @@
+﻿/* Grid Principal - Ajustado para maior espaçamento entre cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Card Estilo Glass/Moderno - Mais arredondado e com sombra suave */
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 3rem; /* Super arredondado como na imagem */
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-8px);
+    background: white;
+    box-shadow: 0 30px 60px rgba(249, 115, 22, 0.1); /* Sombra levemente laranja no hover */
+  }
+}
+
+/* Estrutura do Conteúdo */
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* Box do Ícone Principal (Gradiente Laranja) */
+.icon-box {
+  width: 85px; 
+  height: 85px;
+  border-radius: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fb923c, #ea580c);
+  color: white;
+  box-shadow: 0 15px 30px rgba(234, 88, 12, 0.2);
+  transition: all 0.5s ease;
+  position: relative;
+
+  .glass-card:hover & {
+    transform: scale(1.05) rotate(3deg);
+  }
+}
+
+/* Badge Laranja Sólida (Igual à imagem da patinha) */
+.badge-solid-orange {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f97316; /* Laranja Sólido */
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+}
+
+/* Textos e Labels */
+.stat-label {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 3.5rem; /* Número bem grande conforme imagem */
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+/* Utilitários de Cores */
+.bg-orange-gradient { background: linear-gradient(135deg, #fb923c, #ea580c); }
+.text-orange { color: #f97316; }
+
+/* Animação para o ícone de relógio no badge */
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}

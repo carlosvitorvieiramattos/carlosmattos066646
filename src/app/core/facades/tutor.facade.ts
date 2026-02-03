@@ -3,10 +3,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Tutor } from '../model/tutor.model';
 
-// Interface ajustada conforme o OpenAPI da sua API (Pagina proprietária paginadaDto)
+// Interface ajustada conforme o OpenAPI da sua API
 interface PaginatedTutorResponse {
   content: Tutor[];
-  total: number; // Corrigido de totalElements para total
+  total: number; 
   size: number;
   page: number;
 }
@@ -31,7 +31,6 @@ export class TutorFacade {
 
   /**
    * Busca tutores de forma paginada.
-   * O servidor retorna um recorte (content) e o total geral de registros (total).
    */
   async buscarTutores(filtro: string = '', pagina: number = 0, tamanho: number = 10): Promise<void> {
     this._loading.set(true);
@@ -45,10 +44,7 @@ export class TutorFacade {
         this.http.get<PaginatedTutorResponse>(this.API_URL, { params })
       );
       
-      // Atualiza a lista com os itens da página atual
       this._listaTutores.set(res.content || []);
-      
-      // ATENÇÃO: Aqui res.total agora mapeia corretamente para o valor da API (ex: 41)
       this._totalElementos.set(res.total || 0);
       
     } catch (error) {
@@ -60,12 +56,31 @@ export class TutorFacade {
     }
   }
 
+  /**
+   * Busca um tutor específico por ID para carregar no detalhe ou edição.
+   */
+  async buscarTutorPorId(id: number): Promise<void> {
+    this._loading.set(true);
+    try {
+      const tutor = await firstValueFrom(this.http.get<Tutor>(`${this.API_URL}/${id}`));
+      this._tutor.set(tutor);
+    } catch (error) {
+      console.error('Erro ao buscar tutor por ID:', error);
+      this._tutor.set(null);
+    } finally {
+      this._loading.set(false);
+    }
+  }
+
   async vincularPetAoTutor(tutorId: number, petId: number): Promise<void> {
     try {
-      // Endpoint POST /v1/tutores/{id}/pets/{petId}
       await firstValueFrom(
         this.http.post(`${this.API_URL}/${tutorId}/pets/${petId}`, {})
       );
+      // Opcional: Recarregar o tutor atual se ele for o que recebeu o pet
+      if (this._tutor()?.id === tutorId) {
+        await this.buscarTutorPorId(tutorId);
+      }
     } catch (error) {
       throw new Error('Não foi possível vincular o animal.');
     }
@@ -73,10 +88,17 @@ export class TutorFacade {
 
   async desvincularPetDoTutor(tutorId: number, petId: number): Promise<void> {
     try {
-      // Endpoint DELETE /v1/tutores/{id}/pets/{petId}
       await firstValueFrom(
         this.http.delete(`${this.API_URL}/${tutorId}/pets/${petId}`)
       );
+      // Atualiza o estado local do tutor detalhado caso ele esteja carregado
+      const tutorAtual = this._tutor();
+      if (tutorAtual?.id === tutorId) {
+        this._tutor.set({
+          ...tutorAtual,
+          pets: tutorAtual.pets?.filter(p => p.id !== petId) || []
+        });
+      }
     } catch (error) {
       throw new Error('Erro ao remover vínculo.');
     }
@@ -87,6 +109,10 @@ export class TutorFacade {
       await firstValueFrom(this.http.delete(`${this.API_URL}/${id}`));
       this._listaTutores.update(tutores => tutores.filter(t => t.id !== id));
       this._totalElementos.update(total => Math.max(0, total - 1));
+      
+      if (this._tutor()?.id === id) {
+        this._tutor.set(null);
+      }
     } catch (error) {
       throw new Error('Erro ao excluir tutor.');
     }

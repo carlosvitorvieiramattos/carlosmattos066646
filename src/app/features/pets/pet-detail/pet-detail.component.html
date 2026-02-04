@@ -23,14 +23,23 @@
     </div>
   } @else if (pet()) {
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
       <div class="lg:col-span-4 space-y-6">
         <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100">
           <div class="bg-gradient-to-b from-orange-50 to-white p-8 text-center">
+            
             <div class="relative inline-block">
-               <img [src]="pet()?.foto?.url || 'assets/images/no-image.png'" 
-                    class="w-52 h-52 rounded-[3rem] object-cover mx-auto border-4 border-white shadow-xl"
-                    [alt]="pet()?.nome">
-               <div class="absolute bottom-2 right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-white shadow-sm"></div>
+              @if (pet()?.foto?.url) {
+                <img [src]="pet()!.foto!.url" 
+                     class="w-52 h-52 rounded-[3rem] object-cover mx-auto border-4 border-white shadow-xl"
+                     [alt]="pet()?.nome">
+              } @else {
+                <div class="w-52 h-52 rounded-[3rem] bg-[#8da2b5] mx-auto border-4 border-white shadow-xl flex flex-col items-center justify-center gap-2">
+                  <i class="bi bi-paw-fill text-white text-7xl"></i>
+                  <span class="text-white font-semibold text-[10px] uppercase tracking-wider">Adicionar foto </span>
+                </div>
+              }
+              <div class="absolute bottom-4 right-4 bg-green-500 w-8 h-8 rounded-full border-4 border-white shadow-sm"></div>
             </div>
             
             <div class="mt-6 space-y-1">
@@ -109,7 +118,9 @@
       <div class="p-8">
         <div class="flex justify-between items-center mb-6">
           <h3 class="text-xl font-black text-slate-800 uppercase tracking-tight">Vincular Novo Tutor</h3>
-          <button (click)="fecharModal()" class="text-slate-400 hover:text-slate-600"><i class="bi bi-x-lg text-xl"></i></button>
+          <button (click)="fecharModal()" class="text-slate-400 hover:text-slate-600">
+            <i class="bi bi-x-lg text-xl"></i>
+          </button>
         </div>
 
         <div class="relative mb-6">

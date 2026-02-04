@@ -1,11 +1,9 @@
-/* Container Principal */
 main {
-  min-height: calc(100vh - 73px); /* Altura total menos a altura aproximada da nav */
-  background-color: #fffaf5; /* Fundo suave alaranjado para combinar com o tema */
+  min-height: calc(100vh - 73px); 
+  background-color: #fffaf5; 
   transition: padding 0.3s ease;
 }
 
-/* Estilo para a Logo */
 .logo {
   transition: transform 0.3s ease;
 }
@@ -14,7 +12,6 @@ main {
   transform: rotate(-5deg) scale(1.1);
 }
 
-/* Melhoria nos Links de Navegação */
 nav a {
   position: relative;
   display: flex;
@@ -23,12 +20,10 @@ nav a {
   overflow: hidden;
 }
 
-/* Efeito de Link Ativo (Reforço do Tailwind) */
 nav a.text-orange-600 {
   box-shadow: inset 0 0 0 1px rgba(234, 88, 12, 0.1);
 }
 
-/* Animação suave para o conteúdo que entra via Router Outlet */
 router-outlet + * {
   display: block;
   animation: fadeIn 0.5s ease-out;
@@ -63,7 +58,7 @@ router-outlet + * {
   background: #f97316;
 }
 
-/* Responsividade para telas muito pequenas */
+
 @media (max-width: 640px) {
   nav {
     padding-left: 1rem;

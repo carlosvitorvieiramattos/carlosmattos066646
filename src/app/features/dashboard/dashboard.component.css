@@ -1,12 +1,10 @@
-﻿/* Grid Principal - Ajustado para maior espaçamento entre cards */
-.stats-grid {
+﻿.stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
 
-/* Card Estilo Glass/Moderno - Mais arredondado e com sombra suave */
 .glass-card {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
@@ -26,7 +24,6 @@
   }
 }
 
-/* Estrutura do Conteúdo */
 .stat-item {
   display: flex;
   align-items: center;
@@ -54,12 +51,11 @@
   }
 }
 
-/* Badge Laranja Sólida (Igual à imagem da patinha) */
 .badge-solid-orange {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #f97316; /* Laranja Sólido */
+  background-color: #f97316; 
   color: #ffffff;
   padding: 0.5rem 1rem;
   border-radius: 1rem;

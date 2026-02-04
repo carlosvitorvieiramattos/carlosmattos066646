@@ -33,7 +33,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     await this.carregarDadosDashboard();
 
-    // Atualização em tempo real a cada 60 segundos
     this.timerSubscription = interval(60000).subscribe(() => {
       this.carregarDadosDashboard(false); 
     });
@@ -47,18 +46,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (mostrarLoading) this.loading.set(true);
     
     try {
-      // AJUSTE: Para "puxar todos", aumentamos o 'size' (ex: 999) 
-      // ou usamos o totalElements da resposta anterior.
+      
       const [resPets, resTutores] = await Promise.all([
         this.petService.carregarPets('', 0, 999, '', 'id,desc'), 
         this.tutorService.carregarTutores('', 0, 999) 
       ]);
 
-      // 1. Atualiza os contadores globais (independente do size)
       this.totalPets.set(this.extrairTotal(resPets));
       this.totalTutores.set(this.extrairTotal(resTutores));
 
-      // 2. Mapeia TODOS os pets recebidos para a lista da tabela
       const listaTodosPets = resPets?.content || [];
       const atividades: Atividade[] = listaTodosPets.map((pet: any) => ({
         id: pet.id,

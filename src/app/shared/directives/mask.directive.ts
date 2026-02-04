@@ -12,7 +12,7 @@ export class MaskDirective {
 
   @HostListener('input', ['$event'])
   onInputChange(event: any) {
-    let value = event.target.value.replace(/\D/g, ''); // Remove tudo que não é número
+    let value = event.target.value.replace(/\D/g, ''); 
 
     if (this.maskType === 'cpf') {
       value = value.substring(0, 11); // Limita a 11 dígitos

@@ -11,7 +11,7 @@ export interface TutorFoto {
 }
 
 export interface Tutor {
-  id: number; // ID geralmente é obrigatório na resposta
+  id: number; 
   nome: string;
   email: string;
   telefone: string;
@@ -93,17 +93,14 @@ export class TutorService {
           this.uploadProgress.set(Math.round((100 * event.loaded) / event.total));
         }
       }),
-      // Filtra para que o Observable só emita o valor final (HttpResponse)
       filter((event): event is HttpResponse<TutorFoto> => event.type === HttpEventType.Response),
       map(res => res.body as TutorFoto)
     );
 
-    // lastValueFrom espera o fluxo fechar, evitando o erro "canceled"
     return await lastValueFrom(upload$);
   }
 
   async vincularPet(tutorId: number | string, petId: number | string): Promise<void> {
-    // Retornamos firstValueFrom para garantir a conclusão antes do componente seguir
     return await firstValueFrom(this.http.post<void>(`${this.apiUrl}/${tutorId}/pets/${petId}`, {}));
   }
 

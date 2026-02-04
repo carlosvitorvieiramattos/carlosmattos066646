@@ -59,8 +59,6 @@ describe('TutorService', () => {
     });
     expect(service.uploadProgress()).toBe(50);
 
-    // CORREÇÃO: Use flush para a resposta final. 
-    // O HttpTestingController criará um HttpResponse completo para você.
     req.flush(mockResponse);
 
     const res = await promise;
@@ -81,7 +79,6 @@ describe('TutorService', () => {
 
     await promise;
     
-    // Agora o teste valida se o filter() do Signal realmente funcionou
     expect(service.tutores().length).toBe(0);
   });
 

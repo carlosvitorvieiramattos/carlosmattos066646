@@ -29,9 +29,7 @@ export class TutorListComponent implements OnInit {
 
   // --- LÓGICA REATIVA (Computed) ---
   
-  /**
-   * Calcula o total de páginas reativamente.
-   */
+ 
   totalPaginas = computed(() => {
     const total = this.tutorFacade.totalElementos();
     return total > 0 ? Math.ceil(total / this.itensPorPagina) : 1;
@@ -49,7 +47,6 @@ export class TutorListComponent implements OnInit {
   async carregarDados() {
     this.isLoading.set(true);
     try {
-      // A Facade gerencia o estado global da lista e do total de elementos
       await this.tutorFacade.buscarTutores(
         this.searchTerm(), 
         this.paginaAtual(), 
@@ -70,9 +67,7 @@ export class TutorListComponent implements OnInit {
     }
   }
 
-  /**
-   * Para evitar chamadas excessivas à API a cada tecla digitada.
-   */
+ 
   filtrar(event: Event) {
     const elemento = event.target as HTMLInputElement;
     this.searchTerm.set(elemento.value);
@@ -87,7 +82,6 @@ export class TutorListComponent implements OnInit {
     try {
       await this.tutorFacade.excluirTutor(tutor.id);
       
-      // Lógica inteligente de paginação após exclusão
       if (this.tutoresFiltrados().length <= 1 && this.paginaAtual() > 0) {
         this.paginaAtual.update(p => p - 1);
       }

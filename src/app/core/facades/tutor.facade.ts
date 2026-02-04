@@ -3,7 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Tutor } from '../model/tutor.model';
 
-// Interface ajustada conforme o OpenAPI da sua API
 interface PaginatedTutorResponse {
   content: Tutor[];
   total: number; 

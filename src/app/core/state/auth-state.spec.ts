@@ -5,9 +5,9 @@ describe('AuthState', () => {
   let service: AuthState;
 
   beforeEach(() => {
+    localStorage.clear(); 
     TestBed.configureTestingModule({});
     service = TestBed.inject(AuthState);
-    localStorage.clear(); // Garante isolamento entre os testes
   });
 
   it('deve iniciar com estado não autenticado (null)', () => {
@@ -21,11 +21,9 @@ describe('AuthState', () => {
 
     service.setTokens(token, refresh);
 
-    // Verifica Signals (Reatividade)
     expect(service.accessToken()).toBe(token);
     expect(service.isAuthenticated()).toBeTrue();
 
-    // Verifica Persistência (LocalStorage)
     expect(localStorage.getItem('access_token')).toBe(token);
     expect(localStorage.getItem('refresh_token')).toBe(refresh);
   });
@@ -40,10 +38,9 @@ describe('AuthState', () => {
   });
 
   it('deve carregar estado inicial do localStorage', () => {
-    // Simula token já existente antes do serviço carregar
+    localStorage.clear();
     localStorage.setItem('access_token', 'token-existente');
     
-    // Criamos uma nova instância para testar o construtor
     const newService = new AuthState();
     
     expect(newService.accessToken()).toBe('token-existente');

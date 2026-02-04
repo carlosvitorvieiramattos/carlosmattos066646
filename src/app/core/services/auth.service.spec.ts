@@ -10,8 +10,8 @@ describe('AuthService', () => {
   let authState: AuthState;
   let routerSpy: jasmine.SpyObj<Router>;
 
-  // Rota centralizada conforme definido no Guard/Interceptor
-  const LOGIN_ROUTE = '/autenticacao/login';
+  // Rota conforme definido no serviço real
+  const LOGIN_ROUTE = '/login';
 
   beforeEach(() => {
     localStorage.clear();
@@ -42,14 +42,12 @@ describe('AuthService', () => {
   });
 
   it('deve armazenar o access_token e atualizar o Signal ao fazer login', async () => {
-    // Resposta Mock conforme Página 2 do PDF da API
     const mockResponse = { 
       access_token: 'token-123', 
       refresh_token: 'ref-123',
       expires_in: 3600 
     };
     
-    // Payload conforme Página 1 do PDF (username/password)
     const credentials = { username: 'admin', password: 'admin' }; 
 
     const loginPromise = service.login(credentials);
@@ -83,7 +81,6 @@ describe('AuthService', () => {
 
     const refreshPromise = service.refreshToken();
 
-    // URL conforme Página 2 do PDF
     const req = httpMock.expectOne('https://pet-manager-api.geia.vip/autenticacao/refresh');
     expect(req.request.method).toBe('PUT');
     

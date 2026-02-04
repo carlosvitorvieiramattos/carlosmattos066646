@@ -8,8 +8,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-login',
   standalone: true,
-  // Dica: Se estiver no Angular 17+, o CommonModule muitas vezes é dispensável 
-  // se você usar a nova sintaxe de controle de fluxo (@if, @for).
+  
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -19,18 +18,15 @@ export class LoginComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  // Signals para estado da UI
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
 
-  // Formulário com tipagem implícita forte
   loginForm: FormGroup = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
     password: ['', [Validators.required, Validators.minLength(3)]]
   });
 
   constructor() {
-    // Limpa a mensagem de erro automaticamente quando o usuário volta a digitar
     this.loginForm.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe(() => {
@@ -52,7 +48,6 @@ export class LoginComponent implements OnInit {
     this.errorMessage.set(null);
 
     try {
-      // Enviando apenas os valores brutos para o serviço
       const sucesso = await this.authService.login(this.loginForm.getRawValue());
 
       if (sucesso) {

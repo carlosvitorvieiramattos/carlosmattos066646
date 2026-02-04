@@ -20,10 +20,7 @@ export class AuthService {
   // URL base sem a versão /v1 para autenticação, conforme PDF
   private readonly BASE_URL = 'https://pet-manager-api.geia.vip/autenticacao';
 
-  /**
-   * Ajustado para receber exatamente o que o login.component envia:
-   * { username: 'admin', password: 'admin' }
-   */
+
   async login(credenciais: any): Promise<boolean> {
     try {
       // O payload deve ser exatamente {"username": "...", "password": "..."}
@@ -32,7 +29,6 @@ export class AuthService {
       );
 
       if (res?.access_token) {
-        // Armazena no AuthState e no LocalStorage através do seu state
         this.authState.setTokens(res.access_token, res.refresh_token);
         return true;
       }
@@ -43,9 +39,7 @@ export class AuthService {
     }
   }
 
-  /**
-   * Renovação de token via PUT conforme Página 2 do PDF
-   */
+  
   async refreshToken(): Promise<boolean> {
     const refresh = localStorage.getItem('refresh_token');
     if (!refresh) return false;

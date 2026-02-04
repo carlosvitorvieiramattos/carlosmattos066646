@@ -84,13 +84,11 @@ const handle401Error = (
     );
   } 
   
-  // CASO B: Já existe um refresh ocorrendo (Fila de Espera)
   else {
     return refreshTokenSubject.pipe(
       filter(token => token !== null), // Espera até ter valor
       take(1), // Pega apenas um valor e encerra
       switchMap((jwt) => {
-        // Quando o token chegar, reenvia a requisição que estava parada
         return next(req.clone({
           setHeaders: { Authorization: `Bearer ${jwt}` }
         }));

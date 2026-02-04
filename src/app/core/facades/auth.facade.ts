@@ -20,12 +20,9 @@ export class AuthFacade {
   private readonly state = inject(AuthState);
   private readonly router = inject(Router);
   
-  // URL ajustada conforme sua necessidade
   private readonly API_URL = 'https://pet-manager-api.geia.vip/autenticacao';
 
-  /**
-   * Método compatível com o seu LoginComponent (utiliza async/await)
-   */
+  
   async login(credenciais: { username: string; password: string }): Promise<boolean> {
     // Transformamos o Observable em Promise para o componente usar o try/catch
     try {

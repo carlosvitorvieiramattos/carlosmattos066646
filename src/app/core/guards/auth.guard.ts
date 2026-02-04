@@ -13,11 +13,15 @@ export const authGuard: CanActivateFn = async (route, state) => {
     return true;
   }
 
-  // Se não tem access_token, tenta o refresh conforme Pág. 2 do PDF [cite: 49, 50]
-  const sucessoRefresh = await authService.refreshToken();
+  try {
+    const sucessoRefresh = await authService.refreshToken();
 
-  if (sucessoRefresh) {
-    return true;
+    if (sucessoRefresh) {
+      return true;
+    }
+  } catch (error) {
+    // Trata erros do refresh
+    console.error('Erro ao fazer refresh:', error);
   }
 
   // Se tudo falhar, manda para o login

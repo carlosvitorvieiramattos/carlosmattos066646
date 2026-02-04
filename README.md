@@ -321,14 +321,14 @@ tailwindcss -i ./src/styles/globals.css -o ./dist/output.css
 
 ##  Boas Práticas Implementadas
 
-✅ **Standalone Components** - Angular 18+ standalone API  
-✅ **Reactive Forms** - Validação complexa  
-✅ **RxJS Operators** - Otimização de observables  
-✅ **Strong Typing** - TypeScript strict mode  
-✅ **Error Handling** - Tratamento centralizado de erros  
-✅ **Lazy Loading** - Carregamento sob demanda de módulos  
-✅ **Unit Tests** - Karma + Jasmine  
-✅ **Clean Code** - Padrões SOLID e DRY  
+ **Standalone Components** - Angular 18+ standalone API  
+ **Reactive Forms** - Validação complexa  
+ **RxJS Operators** - Otimização de observables  
+ **Strong Typing** - TypeScript strict mode  
+ **Error Handling** - Tratamento centralizado de erros  
+ **Lazy Loading** - Carregamento sob demanda de módulos  
+ **Unit Tests** - Karma + Jasmine  
+ **Clean Code** - Padrões SOLID e DRY  
 
 ---
 
@@ -346,10 +346,8 @@ Este projeto é propriedade da SEPLAG-MT e desenvolvido como desafio técnico.
 
 ## 👤 Informações do Desenvolvedor
 
-- **Nome:** Carlos Mattos
-- **LinkedIn:** [seu-perfil]
-- **Email:** [seu-email]
-- **GitHub:** [seu-github]
+- **Nome:** Carlos Vitor Vieira Mattos
+
 
 ---
 

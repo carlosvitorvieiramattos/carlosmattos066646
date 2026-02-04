@@ -32,10 +32,8 @@ describe('PetService', () => {
       number: 0
     };
 
-    // Iniciamos a chamada (Promise)
     const promise = service.carregarPets();
 
-    // Simulamos a requisição HTTP
     const req = httpMock.expectOne(req => req.url === API_URL && req.params.has('page'));
     expect(req.request.method).toBe('GET');
     req.flush(mockResponse);
@@ -44,7 +42,7 @@ describe('PetService', () => {
 
     // Verificações
     expect(result.content.length).toBe(1);
-    expect(service.pets()).toEqual(mockResponse.content); // Valida o Signal reativo
+    expect(service.pets()).toEqual(mockResponse.content); 
     expect(service.totalPetsCarregados()).toBe(1); // Valida o Computed
   });
 
@@ -65,11 +63,8 @@ describe('PetService', () => {
   });
 
   it('deve deletar um pet e atualizar o signal localmente', async () => {
-    // Estado inicial com um pet
-    // Nota: Para testar o sinal privado, podemos carregar dados antes
     const initialPet: Pet = { id: 123, nome: 'Bobi', raca: 'Poodle', idade: 5 };
     
-    // Chamada de delete
     const promise = service.deletePet(123);
 
     const req = httpMock.expectOne(`${API_URL}/123`);
@@ -78,7 +73,6 @@ describe('PetService', () => {
 
     await promise;
     
-    // Verifica se o pet sumiu do Signal
     expect(service.pets().find(p => p.id === 123)).toBeUndefined();
   });
 });

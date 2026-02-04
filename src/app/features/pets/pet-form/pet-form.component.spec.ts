@@ -2,26 +2,20 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { PetFormComponent } from './pet-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PetFacade } from '@core/facades/pet.facade';
-import { TutorFacade } from '@core/facades/tutor.facade';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PetService } from '@core/services/pet.service';
 import { of } from 'rxjs';
 
 describe('PetFormComponent', () => {
   let component: PetFormComponent;
   let fixture: ComponentFixture<PetFormComponent>;
   
-  // Criamos o mock com os nomes exatos da sua Facade
-  const petFacadeMock = {
-    cadastrarPet: jasmine.createSpy('cadastrarPet'),
+  // Mock do PetService
+  const petServiceMock = {
+    addPet: jasmine.createSpy('addPet'),
+    updatePet: jasmine.createSpy('updatePet'),
     uploadFoto: jasmine.createSpy('uploadFoto'),
-    // Caso use o getPetById para edição, mantenha-o aqui:
     getPetById: jasmine.createSpy('getPetById').and.returnValue(Promise.resolve({ id: 1, nome: 'Rex' }))
-  };
-
-  const tutorFacadeMock = {
-    // Simulando o Signal ou Observable de tutores
-    tutores: () => [{ id: 1, nome: 'Carlos' }], 
-    carregarTutores: jasmine.createSpy('carregarTutores')
   };
 
   const routerMock = {
@@ -30,10 +24,9 @@ describe('PetFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PetFormComponent, ReactiveFormsModule],
+      imports: [PetFormComponent, ReactiveFormsModule, HttpClientTestingModule],
       providers: [
-        { provide: PetFacade, useValue: petFacadeMock },
-        { provide: TutorFacade, useValue: tutorFacadeMock },
+        { provide: PetService, useValue: petServiceMock },
         { provide: Router, useValue: routerMock },
         {
           provide: ActivatedRoute,
@@ -49,35 +42,32 @@ describe('PetFormComponent', () => {
     fixture.detectChanges();
   });
 
-  it('deve chamar cadastrarPet quando o formulário for válido', fakeAsync(() => {
-    // 1. Preenche o formulário
+  it('deve chamar addPet quando o formulário for válido', fakeAsync(() => {
     component.petForm.patchValue({
       nome: 'Thor',
-      especie: 'Cão',
-      tutorId: 1
+      raca: 'Labrador',
+      idade: 3
     });
 
-    // 2. Configura o mock para retornar uma Promise resolvida
-    petFacadeMock.cadastrarPet.and.returnValue(Promise.resolve({ id: 10, nome: 'Thor' }));
+    petServiceMock.addPet.and.returnValue(Promise.resolve({ id: 10, nome: 'Thor' }));
+    petServiceMock.uploadFoto.and.returnValue(Promise.resolve({}));
 
-    // 3. Dispara o envio
     component.onSubmit();
     
-    // 4. Resolve as Promises
     tick();
 
-    expect(petFacadeMock.cadastrarPet).toHaveBeenCalled();
+    expect(petServiceMock.addPet).toHaveBeenCalled();
     expect(routerMock.navigate).toHaveBeenCalledWith(['/pets']);
   }));
 
   it('deve exibir erro se o cadastro falhar', fakeAsync(() => {
-    petFacadeMock.cadastrarPet.and.returnValue(Promise.reject('Erro de API'));
+    petServiceMock.addPet.and.returnValue(Promise.reject('Erro de API'));
     
-    component.petForm.patchValue({ nome: 'Thor', especie: 'Cão', tutorId: 1 });
+    component.petForm.patchValue({ nome: 'Thor', raca: 'Labrador', idade: 3 });
     
     component.onSubmit();
     tick();
 
-   
+    expect(component.petForm.value.nome).toBe('Thor');
   }));
 });

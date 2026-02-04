@@ -13,19 +13,16 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   styleUrls: ['./pet-form.component.css']
 })
 export class PetFormComponent implements OnInit {
-  // Injeções de Dependência
   private fb = inject(FormBuilder);
   private petService = inject(PetService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private sanitizer = inject(DomSanitizer);
 
-  // Estados com Signals para melhor performance e reatividade
   isLoading = signal(false);
   isEditMode = signal(false);
   petId = signal<number | null>(null);
   
-  // Preview seguro para evitar erros de segurança do Angular (unsafe: url)
   fotoPreviewSafe = signal<SafeUrl | null>(null);
   arquivoSelecionado = signal<File | null>(null);
 

@@ -38,7 +38,6 @@ import { PetService } from '../../../core/services/pet.service';
 export class PetPhotoUploadComponent {
   private petService = inject(PetService);
   
-  // CORREÇÃO: Tipado apenas como number para evitar erro TS2345
   @Input({ required: true }) petId!: number; 
   @Output() uploadSuccess = new EventEmitter<void>();
 

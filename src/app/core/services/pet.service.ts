@@ -44,10 +44,7 @@ export class PetService {
 
   // --- MÉTODOS ---
 
-  /**
-   * Agora aceita 5 argumentos, incluindo a ordenação (sort).
-   * Valor padrão: 'id,desc' (mais recentes primeiro)
-   */
+ 
   async carregarPets(
     nome: string = '', 
     page: number = 0, 

@@ -1,5 +1,4 @@
-﻿// 1. CORREÇÃO DOS IMPORTS: Tudo que é estrutural vem do @angular/core
-import { Component, inject, OnInit, signal, computed, Input } from '@angular/core'; 
+﻿import { Component, inject, OnInit, signal, computed, Input } from '@angular/core'; 
 import { CommonModule } from '@angular/common'; // CommonModule continua aqui (para Pipes, etc)
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -33,7 +32,6 @@ export class PetDetailComponent implements OnInit {
   listaTutores = signal<Tutor[]>([]);
   filtroTutor = signal('');
 
-  // 2. CORREÇÃO DO ERRO 'any': Tipagem explícita nos parâmetros (t: Tutor)
   tutoresFiltrados = computed(() => {
     const termo = this.filtroTutor().toLowerCase().trim();
     const lista = this.listaTutores(); 

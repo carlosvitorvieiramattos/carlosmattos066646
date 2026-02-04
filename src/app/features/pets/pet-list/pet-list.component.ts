@@ -29,15 +29,13 @@ export class PetListComponent implements OnInit {
   async buscar(page: number = 0) {
     try {
       // AJUSTES: 
-      // 1. Mudamos de 8 para 10 itens por página.
-      // 2. Adicionamos o parâmetro de ordenação 'id,desc' (mais recente primeiro).
-      // Nota: Verifique se seu PetService aceita o parâmetro de ordenação.
+    
       const res = await this.petService.carregarPets(
         this.filtroNome, 
         page, 
-        10, // Tamanho da página corrigido para 10
+        10, 
         this.filtroRaca,
-        'id,desc' // Ordenação por ID decrescente (ordem de cadastro)
+        'id,desc' 
       );
       
       this.listaDePets.set(res.content || []);
@@ -59,7 +57,6 @@ export class PetListComponent implements OnInit {
     if (confirm('Tem certeza que deseja excluir este pet do sistema?')) {
       try {
         await this.petService.deletePet(id);
-        // Se a página atual ficar vazia após excluir, voltamos uma página
         const novaPagina = this.listaDePets().length === 1 && this.currentPage() > 0 
           ? this.currentPage() - 1 
           : this.currentPage();

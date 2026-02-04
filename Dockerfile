@@ -12,8 +12,8 @@ FROM nginx:alpine
 # Remove a config padrão
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Tente sem o "/browser" primeiro se o seu log de build não mostrou essa pasta explicitamente
-COPY --from=build /app/dist/pet-registry-mt /usr/share/nginx/html
+# Copia os arquivos da pasta browser gerada pelo Angular
+COPY --from=build /app/dist/pet-registry-mt/browser /usr/share/nginx/html
 
 # Copia sua config
 COPY nginx.conf /etc/nginx/conf.d/default.conf

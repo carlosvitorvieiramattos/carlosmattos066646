@@ -1,0 +1,142 @@
+<div class="p-4 md:p-8 animate-in fade-in duration-500 bg-[#f8fafc] min-h-screen flex flex-col items-center w-full">
+
+  <div class="w-full max-w-4xl">
+    
+    <div class="mb-8 w-full">
+      <button (click)="voltar()" 
+              class="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 font-semibold mb-6 transition-colors">
+        <i class="bi bi-chevron-left text-lg"></i>
+        <span>Voltar para Tutores</span>
+      </button>
+    </div>
+
+    @if (carregando()) {
+      <div class="flex items-center justify-center py-20 w-full">
+        <div class="text-center">
+          <div class="inline-block animate-spin">
+            <i class="bi bi-hourglass-split text-5xl text-orange-500"></i>
+          </div>
+          <p class="text-slate-500 font-medium mt-4">Carregando detalhes do tutor...</p>
+        </div>
+      </div>
+    }
+
+    @if (erro()) {
+      <div class="bg-red-50 border border-red-200 rounded-2xl p-6 text-center w-full">
+        <i class="bi bi-exclamation-circle text-4xl text-red-500 mb-3 block"></i>
+        <p class="text-red-600 font-medium">{{ erro() }}</p>
+        <button (click)="voltar()" 
+                class="mt-4 px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-semibold">
+          Voltar
+        </button>
+      </div>
+    }
+
+    @if (tutor() && !carregando() && !erro()) {
+      <div class="w-full">
+        
+        <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-lg p-8 md:p-12 mb-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <div class="flex flex-col items-center">
+              <div class="w-48 h-48 rounded-[2rem] bg-orange-50 overflow-hidden border-4 border-white shadow-lg flex items-center justify-center">
+                @if (tutor()!.foto?.url) {
+                  <img [src]="tutor()!.foto!.url" [alt]="tutor()!.nome" class="w-full h-full object-cover">
+                } @else {
+                  <div class="text-orange-300 text-center">
+                    <i class="bi bi-person-fill text-8xl"></i>
+                  </div>
+                }
+              </div>
+              <h1 class="text-2xl md:text-3xl font-black text-slate-900 mt-6 text-center leading-tight">
+                {{ tutor()!.nome }}
+              </h1>
+            </div>
+
+            <div class="md:col-span-2 flex flex-col justify-start">
+              <div class="mb-6 pb-6 border-b border-slate-100">
+                <p class="text-slate-500 text-sm font-semibold uppercase tracking-wide mb-2">
+                  <i class="bi bi-envelope-at text-orange-500 mr-2"></i>Email
+                </p>
+                <p class="text-slate-900 text-lg font-semibold break-all">{{ tutor()!.email }}</p>
+              </div>
+
+              <div class="mb-6 pb-6 border-b border-slate-100">
+                <p class="text-slate-500 text-sm font-semibold uppercase tracking-wide mb-2">
+                  <i class="bi bi-card-text text-orange-500 mr-2"></i>CPF
+                </p>
+                <p class="text-slate-900 text-lg font-semibold">{{ tutor()!.cpf || '---' }}</p>
+              </div>
+
+              <div class="mb-6 pb-6 border-b border-slate-100">
+                <p class="text-slate-500 text-sm font-semibold uppercase tracking-wide mb-2">
+                  <i class="bi bi-telephone text-orange-500 mr-2"></i>Telefone
+                </p>
+                <p class="text-slate-900 text-lg font-semibold">{{ tutor()!.telefone || '---' }}</p>
+              </div>
+
+              <div>
+                <p class="text-slate-500 text-sm font-semibold uppercase tracking-wide mb-2">
+                  <i class="bi bi-geo-alt text-orange-500 mr-2"></i>Endereço
+                </p>
+                <p class="text-slate-900 text-lg font-semibold">{{ tutor()!.endereco || '---' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-lg p-8 md:p-12 mb-8">
+          <div class="flex items-center gap-3 mb-6">
+            <i class="bi bi-paw text-2xl text-orange-500"></i>
+            <h2 class="text-2xl font-black text-slate-900">Pets Cadastrados</h2>
+          </div>
+
+          @if (tutor()!.pets && tutor()!.pets!.length > 0) {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              @for (pet of tutor()!.pets; track pet.id) {
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 hover:border-orange-300 transition-colors">
+                  <div class="flex items-center gap-3">
+                    
+                    <div class="w-16 h-16 rounded-lg bg-orange-100 overflow-hidden flex items-center justify-center flex-shrink-0">
+                      @if (pet.foto?.url) {
+                        <img [src]="pet.foto!.url" [alt]="pet.nome" class="w-full h-full object-cover">
+                      } @else {
+                        <i class="bi bi-paw-fill text-orange-500 text-2xl"></i>
+                      }
+                    </div>
+
+                    <div class="flex-grow">
+                      <p class="font-bold text-slate-900">{{ pet.nome || '---' }}</p>
+                      <p class="text-slate-500 text-sm">{{ pet.raca || 'Raça não informada' }}</p>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="bg-slate-50 rounded-xl p-8 text-center border border-slate-200">
+              <i class="bi bi-inbox text-4xl text-slate-300 mb-3 block"></i>
+              <p class="text-slate-500 font-medium">Nenhum pet cadastrado para este tutor</p>
+            </div>
+          }
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-4 justify-end pb-10">
+          <button (click)="voltar()" 
+                  class="h-12 px-8 bg-slate-100 text-slate-600 rounded-xl hover:bg-slate-200 transition-colors font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+            <i class="bi bi-x-lg"></i> Cancelar
+          </button>
+          <button (click)="editar(tutor()!.id)" 
+                  class="h-12 px-8 bg-slate-900 text-white rounded-xl hover:bg-slate-800 hover:shadow-lg hover:-translate-y-0.5 transition-all font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+            <i class="bi bi-pencil-square"></i> Editar
+          </button>
+          <button (click)="confirmarExclusao()" 
+                  class="h-12 px-8 bg-red-500 text-white rounded-xl hover:bg-red-600 hover:shadow-lg hover:-translate-y-0.5 transition-all font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+            <i class="bi bi-trash3-fill"></i> Excluir
+          </button>
+        </div>
+
+      </div>
+    }
+  </div>
+</div>

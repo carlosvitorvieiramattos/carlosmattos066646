@@ -60,6 +60,11 @@ export const routes: NgRoutes = [
             path: 'editar/:id', 
             title: 'Pet-MT - Editar Tutor',
             loadComponent: () => import('./features/tutores/tutor-form/tutor-form.component').then(m => m.TutorFormComponent) 
+          },
+          { 
+            path: ':id', 
+            title: 'Pet-MT - Detalhes do Tutor',
+            loadComponent: () => import('./features/tutores/tutor-detail/tutor-detail.component').then(m => m.TutorDetailComponent) 
           }
         ]
       }

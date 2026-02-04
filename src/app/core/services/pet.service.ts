@@ -15,7 +15,8 @@ export interface Pet {
   nome: string;
   raca: string;
   idade: number;
-  foto?: PetFoto;      
+  foto?: PetFoto; 
+  fotoUrl:string;
   tutores?: any[];
   observacoes?: string;
 }
